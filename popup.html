@@ -7,16 +7,15 @@
   <link rel="stylesheet" href="popup.css">
 </head>
 <body>
-  <!-- Контейнер попапа -->
   <div class="popup-container">
 
-    <!-- Заголовок расширения -->
+    <!-- Заголовок -->
     <header class="header">
       <h1 class="header__title">TabTopic Organizer</h1>
-      <p class="header__subtitle">Группировка вкладок по темам</p>
+      <p class="header__subtitle">Beta 0.2 — Группировка вкладок по темам</p>
     </header>
 
-    <!-- Область статуса — отображает результат выполнения -->
+    <!-- Статус -->
     <div id="status" class="status" aria-live="polite">
       <span id="status-icon" class="status__icon"></span>
       <span id="status-text" class="status__text">Нажмите кнопку для группировки</span>
@@ -43,14 +42,57 @@
       </button>
     </div>
 
-    <!-- Предупреждение о недоступности API (скрыто по умолчанию) -->
+    <!-- Переключатель автогруппировки -->
+    <div class="toggle-row">
+      <label class="toggle-label" for="toggle-auto-group">Автогруппировка новых вкладок</label>
+      <input type="checkbox" id="toggle-auto-group" class="toggle-input">
+    </div>
+
+    <!-- Разделитель -->
+    <hr class="divider">
+
+    <!-- Навигация по секциям -->
+    <nav class="tabs-nav">
+      <button id="tab-categories" class="tabs-nav__btn tabs-nav__btn--active" type="button">Категории</button>
+      <button id="tab-about" class="tabs-nav__btn" type="button">О расширении</button>
+    </nav>
+
+    <!-- Секция: Редактор категорий -->
+    <section id="panel-categories" class="panel">
+      <div class="panel__header">
+        <span class="panel__title">Управление категориями</span>
+        <button id="btn-add-category" class="btn btn--small btn--accent" type="button">+ Добавить</button>
+      </div>
+
+      <div id="categories-list" class="categories-list">
+        <!-- Категории будут отрисованы динамически через popup.js -->
+      </div>
+
+      <div class="panel__actions">
+        <button id="btn-save-categories" class="btn btn--primary btn--small" type="button">Сохранить</button>
+        <button id="btn-reset-categories" class="btn btn--secondary btn--small" type="button">Сбросить</button>
+      </div>
+    </section>
+
+    <!-- Секция: О расширении (скрыта по умолчанию) -->
+    <section id="panel-about" class="panel" hidden>
+      <div class="about">
+        <p><strong>TabTopic Organizer</strong> — Beta 0.2</p>
+        <p>Автоматически анализирует открытые вкладки и группирует их по тематике на основе заголовков и URL.</p>
+        <p>Работает полностью локально. Не собирает и не передаёт данные.</p>
+        <p>Требуется Firefox 128+ с поддержкой API <code>browser.tabs.group</code>.</p>
+        <p class="about__tech">Manifest V3 · JavaScript ES6+ · browser.storage</p>
+      </div>
+    </section>
+
+    <!-- Предупреждение -->
     <div id="warning" class="warning" hidden>
       <p id="warning-text" class="warning__text"></p>
     </div>
 
     <!-- Подвал -->
     <footer class="footer">
-      <span>TabTopic Organizer v1.0</span>
+      <span>TabTopic Organizer v0.2 Beta</span>
     </footer>
   </div>
 

@@ -1,0 +1,1 @@
+TabTopic Organizer — Firefox extension that groups open tabs by topic. Features custom category editing, auto-grouping, and local storage persistence. Manifest V3, no data collection.

@@ -4,18 +4,25 @@
  * Содержит предопределённый словарь ключевых слов, сопоставленных
  * с тематическими категориями, а также функцию categorizeTab(),
  * которая определяет категорию вкладки по её title и url.
+ *
+ * Поддерживает пользовательские категории, загружаемые из browser.storage.local.
  */
 
 "use strict";
 
 /**
- * Объект-словарь: ключ — название категории,
- * значение — объект с полем keywords (массив строк) и color (цвет TabGroup).
- *
- * Цвета соответствуют допустимым значениям API browser.tabs.group:
+ * Цвета, допустимые API browser.tabs.group:
  * "blue", "red", "yellow", "green", "pink", "purple", "cyan", "orange", "grey"
  */
-const CATEGORY_DICT = {
+const AVAILABLE_COLORS = [
+  "blue", "red", "yellow", "green", "pink", "purple", "cyan", "orange", "grey"
+];
+
+/**
+ * Словарь категорий по умолчанию.
+ * Ключ — название категории, значение — { keywords: string[], color: string }.
+ */
+const DEFAULT_CATEGORIES = {
   "Разработка": {
     keywords: [
       "github", "stackoverflow", "stackexchange", "gitlab", "bitbucket",
@@ -107,24 +114,104 @@ const CATEGORY_DICT = {
 };
 
 /**
- * Категория по умолчанию, если ни одно ключевое слово не совпало.
+ * Категория по умолчанию для неопознанных вкладок.
  */
-const DEFAULT_CATEGORY = "Прочее";
+const DEFAULT_CATEGORY_NAME = "Прочее";
+
+/**
+ * Текущий активный словарь категорий.
+ * При запуске загружается из storage, если пользователь ничего не менял — используется DEFAULT.
+ */
+let activeCategories = JSON.parse(JSON.stringify(DEFAULT_CATEGORIES));
+
+/**
+ * Загружает пользовательские категории из browser.storage.local.
+ * Если сохранённых данных нет — использует DEFAULT_CATEGORIES.
+ * Если пользователь удалил все категории — создаёт пустой словарь.
+ *
+ * @returns {Promise<Object>} — текущий словарь категорий
+ */
+async function loadCategoriesFromStorage() {
+  try {
+    const result = await browser.storage.local.get(["categories", "useCustom"]);
+
+    if (result.useCustom && result.categories) {
+      activeCategories = result.categories;
+    } else {
+      activeCategories = JSON.parse(JSON.stringify(DEFAULT_CATEGORIES));
+    }
+  } catch (err) {
+    console.error("[TabTopic] Ошибка загрузки категорий из storage:", err);
+    activeCategories = JSON.parse(JSON.stringify(DEFAULT_CATEGORIES));
+  }
+
+  return activeCategories;
+}
+
+/**
+ * Сохраняет пользовательские категории в browser.storage.local.
+ *
+ * @param {Object} categories — словарь категорий для сохранения
+ * @returns {Promise<void>}
+ */
+async function saveCategoriesToStorage(categories) {
+  try {
+    await browser.storage.local.set({
+      categories: categories,
+      useCustom: true
+    });
+    activeCategories = categories;
+  } catch (err) {
+    console.error("[TabTopic] Ошибка сохранения категорий в storage:", err);
+  }
+}
+
+/**
+ * Сбрасывает категории на значения по умолчанию.
+ *
+ * @returns {Promise<void>}
+ */
+async function resetCategoriesToDefault() {
+  try {
+    await browser.storage.local.remove(["categories", "useCustom"]);
+    activeCategories = JSON.parse(JSON.stringify(DEFAULT_CATEGORIES));
+  } catch (err) {
+    console.error("[TabTopic] Ошибка сброса категорий:", err);
+  }
+}
+
+/**
+ * Возвращает текущий активный словарь категорий.
+ *
+ * @returns {Object} — копия текущего словаря категорий
+ */
+function getActiveCategories() {
+  return JSON.parse(JSON.stringify(activeCategories));
+}
+
+/**
+ * Возвращает категории по умолчанию.
+ *
+ * @returns {Object} — копия словаря по умолчанию
+ */
+function getDefaultCategories() {
+  return JSON.parse(JSON.stringify(DEFAULT_CATEGORIES));
+}
 
 /**
  * Определяет тематическую категорию вкладки на основе заголовка и URL.
+ * Использует текущий активный словарь категорий.
  *
  * @param {browser.tabs.Tab} tab — объект вкладки из API browser.tabs
  * @returns {{ name: string, color: string }} — название и цвет категории
  */
 function categorizeTab(tab) {
-  // Объединяем title и url в одну строку для поиска, приводя к нижнему регистру
   const title = (tab.title || "").toLowerCase();
   const url = (tab.url || "").toLowerCase();
   const text = `${title} ${url}`;
 
-  // Перебираем все категории словаря
-  for (const [categoryName, categoryData] of Object.entries(CATEGORY_DICT)) {
+  // Перебираем все активные категории
+  for (const [categoryName, categoryData] of Object.entries(activeCategories)) {
     for (const keyword of categoryData.keywords) {
       if (text.includes(keyword.toLowerCase())) {
         return { name: categoryName, color: categoryData.color };
@@ -132,6 +219,6 @@ function categorizeTab(tab) {
     }
   }
 
-  // Если совпадений не найдено — возвращаем категорию по умолчанию
-  return { name: DEFAULT_CATEGORY, color: "grey" };
+  // Если совпадений не найдено — категория по умолчанию
+  return { name: DEFAULT_CATEGORY_NAME, color: "grey" };
 }
