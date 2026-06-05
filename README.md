@@ -1,2 +1,61 @@
-# TabTopic-Organizer
-TabTopic Organizer — Firefox extension that automatically analyzes open tabs and groups them by topic (dev, news, social, shopping, work, education, entertainment) using native Tab Groups API. Manifest V3. Local-only, no data collection.
+# TabTopic Organizer — Beta 0.1
+
+Расширение для Mozilla Firefox, которое автоматически анализирует открытые вкладки и группирует их по тематике.
+
+## Возможности
+
+- Анализ заголовков и URL всех вкладок в текущем окне
+- Автоматическая категоризация по 7 темам: Разработка, Новости, Соцсети, Покупки, Работа и Офис, Обучение, Развлечения
+- Визуальная группировка вкладок через нативный API `browser.tabs.group`
+- Цветовое кодирование категорий
+- Кнопка «Разгруппировать все» для сброса
+- Поддержка светлой и тёмной темы
+
+## Установка (временно)
+
+1. Откройте Firefox 128+.
+2. Перейдите по адресу `about:debugging#/runtime/this-firefox`.
+3. Нажмите **«Загрузить временный адд-on...»**.
+4. Выберите файл `manifest.json` из папки проекта.
+5. Расширение готово к работе.
+
+## Структура проекта
+
+```
+├── manifest.json      — Манифест Manifest V3
+├── background.js      — Service Worker: логика группировки
+├── utils.js           — Словарь ключевых слов и функция категоризации
+├── popup.html         — Интерфейс попапа
+├── popup.css          — Стили интерфейса
+├── popup.js           — Логика взаимодействия popup с background
+├── README.md          — Этот файл
+└── privacy-policy.md  — Политика конфиденциальности
+```
+
+## Требования
+
+- Mozilla Firefox 128 или новее
+- API `browser.tabs.group` должен быть доступен
+
+## Категории и ключевые слова
+
+| Категория         | Цвет   | Примеры сайтов                                    |
+|-------------------|--------|---------------------------------------------------|
+| Разработка        | Синий  | GitHub, StackOverflow, MDN, Habr                  |
+| Новости           | Красный| BBC, CNN, РБК, ТASS, The Verge                   |
+| Соцсети           | Фиолетовый | YouTube, Twitter/X, Reddit, Telegram, VK     |
+| Покупки           | Оранжевый | Amazon, Ozon, Wildberries, eBay               |
+| Работа и Офис     | Жёлтый | Google Docs, Notion, Trello, Figma, Jira         |
+| Обучение          | Бирюзовый | Coursera, Udemy, LeetCode, Wikipedia          |
+| Развлечения       | Розовый| Netflix, Spotify, Steam, Кинопоиск, ivi          |
+| Прочее            | Серый  | Все остальные сайты                               |
+
+## Известные ограничения (Beta 0.1)
+
+- Расширение работает как временный адд-on (удаляется при перезапуске Firefox).
+- Не поддерживает пользовательское редактирование категорий (запланировано в следующих версиях).
+- Нет иконок в комплекте — используются стандартные.
+
+## Лицензия
+
+MIT License
