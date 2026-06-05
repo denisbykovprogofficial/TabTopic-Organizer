@@ -77,11 +77,33 @@
     <!-- Секция: О расширении (скрыта по умолчанию) -->
     <section id="panel-about" class="panel" hidden>
       <div class="about">
-        <p><strong>TabTopic Organizer</strong> — Beta 0.2</p>
+        <p class="about__name"><strong>TabTopic Organizer</strong></p>
+        <p class="about__version" id="about-version">Версия: Beta 0.2</p>
+
+        <!-- Динамический статус системы -->
+        <div class="about__status-grid">
+          <div class="about__status-item">
+            <span class="about__status-label">API группировки:</span>
+            <span id="about-api-status" class="about__status-value about__status-value--checking">проверка...</span>
+          </div>
+          <div class="about__status-item">
+            <span class="about__status-label">Автогруппировка:</span>
+            <span id="about-auto-status" class="about__status-value">—</span>
+          </div>
+          <div class="about__status-item">
+            <span class="about__status-label">Категорий загружено:</span>
+            <span id="about-categories-count" class="about__status-value">—</span>
+          </div>
+          <div class="about__status-item">
+            <span class="about__status-label">Хранилище:</span>
+            <span id="about-storage-status" class="about__status-value about__status-value--checking">проверка...</span>
+          </div>
+        </div>
+
         <p>Автоматически анализирует открытые вкладки и группирует их по тематике на основе заголовков и URL.</p>
         <p>Работает полностью локально. Не собирает и не передаёт данные.</p>
         <p>Требуется Firefox 128+ с поддержкой API <code>browser.tabs.group</code>.</p>
-        <p class="about__tech">Manifest V3 · JavaScript ES6+ · browser.storage</p>
+        <p class="about__tech">Manifest V3 · JavaScript ES6+ · browser.storage.local</p>
       </div>
     </section>
 

@@ -245,6 +245,7 @@ function createCategoryCard(name, data) {
   deleteBtn.addEventListener("click", () => {
     card.remove();
     delete currentCategories[name];
+    updateAboutCategoriesCount(currentCategories);
   });
 
   // Обработчик изменения имени
@@ -361,6 +362,7 @@ btnAddCategory.addEventListener("click", () => {
   // Фокус на поле имени новой карточки
   card.querySelector(".category-card__name").focus();
   card.querySelector(".category-card__name").select();
+  updateAboutCategoriesCount(currentCategories);
 });
 
 // Кнопка «Сохранить»
@@ -371,6 +373,7 @@ btnSaveCategories.addEventListener("click", async () => {
     await sendMessage({ action: "saveCategories", categories });
     currentCategories = categories;
     setStatus("success", "Категории сохранены");
+    updateAboutCategoriesCount(currentCategories);
   } catch (err) {
     setStatus("error", "Ошибка сохранения категорий");
     console.error("[TabTopic Popup] Ошибка сохранения:", err);
@@ -385,6 +388,7 @@ btnResetCategories.addEventListener("click", async () => {
       currentCategories = response.categories;
       renderCategories();
       setStatus("success", "Категории сброшены на стандартные");
+      updateAboutCategoriesCount(currentCategories);
     }
   } catch (err) {
     setStatus("error", "Ошибка сброса категорий");
@@ -392,9 +396,68 @@ btnResetCategories.addEventListener("click", async () => {
   }
 });
 
+// === Обновление информации в секции «О расширении» ===
+
+/**
+ * DOM-элементы секции «О расширении».
+ */
+const aboutApiStatus = document.getElementById("about-api-status");
+const aboutAutoStatus = document.getElementById("about-auto-status");
+const aboutCategoriesCount = document.getElementById("about-categories-count");
+const aboutStorageStatus = document.getElementById("about-storage-status");
+
+/**
+ * Обновляет статус API в секции «О расширении».
+ *
+ * @param {boolean} supported — доступен ли API группировки
+ * @param {boolean} autoGroup — включена ли автогруппировка
+ */
+function updateAboutAPIStatus(supported, autoGroup) {
+  if (supported) {
+    aboutApiStatus.textContent = "доступен";
+    aboutApiStatus.classList.remove("about__status-value--fail");
+    aboutApiStatus.classList.add("about__status-value--ok");
+  } else {
+    aboutApiStatus.textContent = "недоступен";
+    aboutApiStatus.classList.remove("about__status-value--ok");
+    aboutApiStatus.classList.add("about__status-value--fail");
+  }
+
+  aboutAutoStatus.textContent = autoGroup ? "включена" : "выключена";
+  aboutAutoStatus.classList.toggle("about__status-value--ok", autoGroup);
+}
+
+/**
+ * Обновляет счётчик загруженных категорий.
+ */
+function updateAboutCategoriesCount(categories) {
+  const count = categories ? Object.keys(categories).length : 0;
+  aboutCategoriesCount.textContent = `${count} шт.`;
+}
+
+/**
+ * Проверяет доступность browser.storage.local.
+ */
+async function checkStorageAvailability() {
+  try {
+    await browser.storage.local.set({ __test: true });
+    await browser.storage.local.remove("__test");
+    aboutStorageStatus.textContent = "доступно";
+    aboutStorageStatus.classList.remove("about__status-value--fail");
+    aboutStorageStatus.classList.add("about__status-value--ok");
+  } catch {
+    aboutStorageStatus.textContent = "недоступно";
+    aboutStorageStatus.classList.remove("about__status-value--ok");
+    aboutStorageStatus.classList.add("about__status-value--fail");
+  }
+}
+
 // === Инициализация ===
 
 (async function init() {
+  // Проверяем storage
+  await checkStorageAvailability();
+
   try {
     const response = await sendMessage({ action: "checkAPI" });
 
@@ -407,14 +470,20 @@ btnResetCategories.addEventListener("click", async () => {
       btnUngroup.disabled = true;
       toggleAutoGroup.disabled = true;
       setStatus("error", "API группировки не поддерживается");
-    } else if (response && response.autoGroup !== undefined) {
-      toggleAutoGroup.checked = response.autoGroup;
+      updateAboutAPIStatus(false, false);
+    } else if (response) {
+      toggleAutoGroup.checked = !!response.autoGroup;
+      updateAboutAPIStatus(true, !!response.autoGroup);
     }
   } catch (err) {
     showWarning("Не удалось инициализировать расширение.");
     setStatus("error", "Ошибка инициализации");
+    updateAboutAPIStatus(false, false);
   }
 
   // Загружаем категории
   await loadCategories();
+
+  // Обновляем счётчик в «О расширении»
+  updateAboutCategoriesCount(currentCategories);
 })();
