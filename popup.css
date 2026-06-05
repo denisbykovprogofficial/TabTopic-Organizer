@@ -1,0 +1,237 @@
+/**
+ * popup.css — Стили для интерфейса расширения TabTopic Organizer.
+ *
+ * Минималистичный, современный дизайн с поддержкой тёмной темы Firefox.
+ * Ширина попапа: 340px (стандарт для Firefox WebExtensions popup).
+ */
+
+/* === Базовые стили === */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  width: 340px;
+  min-height: 200px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text-color, #1a1a1a);
+  background: var(--bg-color, #ffffff);
+}
+
+/* Переменные для тёмной темы Firefox */
+@media (prefers-color-scheme: dark) {
+  body {
+    --text-color: #e0e0e0;
+    --bg-color: #2b2a33;
+    --surface-color: #383740;
+    --border-color: #4a4954;
+    --primary-color: #0060df;
+    --primary-hover: #003eaa;
+    --secondary-color: #42414d;
+    --secondary-hover: #5b5b66;
+    --success-color: #058b00;
+    --error-color: #d70022;
+    --muted-color: #999999;
+  }
+}
+
+/* Светлая тема */
+@media (prefers-color-scheme: light) {
+  body {
+    --text-color: #1a1a1a;
+    --bg-color: #ffffff;
+    --surface-color: #f5f5f5;
+    --border-color: #e0e0e0;
+    --primary-color: #0060df;
+    --primary-hover: #003eaa;
+    --secondary-color: #e0e0e0;
+    --secondary-hover: #cccccc;
+    --success-color: #058b00;
+    --error-color: #d70022;
+    --muted-color: #666666;
+  }
+}
+
+/* === Контейнер попапа === */
+
+.popup-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+}
+
+/* === Заголовок === */
+
+.header {
+  text-align: center;
+}
+
+.header__title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-color);
+  margin-bottom: 2px;
+}
+
+.header__subtitle {
+  font-size: 12px;
+  color: var(--muted-color);
+}
+
+/* === Статус === */
+
+.status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: var(--surface-color);
+  border: 1px solid var(--border-color);
+  transition: all 0.2s ease;
+}
+
+.status--success {
+  border-color: var(--success-color);
+  background: rgba(5, 139, 0, 0.08);
+}
+
+.status--error {
+  border-color: var(--error-color);
+  background: rgba(215, 0, 34, 0.08);
+}
+
+.status--loading {
+  border-color: var(--primary-color);
+  background: rgba(0, 96, 223, 0.08);
+}
+
+.status__icon {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+}
+
+.status__icon--loading {
+  border: 2px solid var(--primary-color);
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+.status__icon--success {
+  color: var(--success-color);
+}
+
+.status__icon--error {
+  color: var(--error-color);
+}
+
+.status__text {
+  flex: 1;
+  font-size: 12px;
+  color: var(--text-color);
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* === Кнопки === */
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s ease, opacity 0.15s ease;
+  outline: none;
+}
+
+.btn:focus-visible {
+  box-shadow: 0 0 0 2px var(--bg-color), 0 0 0 4px var(--primary-color);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn__icon {
+  flex-shrink: 0;
+}
+
+/* Основная кнопка */
+.btn--primary {
+  background: var(--primary-color);
+  color: #ffffff;
+}
+
+.btn--primary:hover:not(:disabled) {
+  background: var(--primary-hover);
+}
+
+.btn--primary:active:not(:disabled) {
+  opacity: 0.85;
+}
+
+/* Вторичная кнопка */
+.btn--secondary {
+  background: var(--secondary-color);
+  color: var(--text-color);
+}
+
+.btn--secondary:hover:not(:disabled) {
+  background: var(--secondary-hover);
+}
+
+.btn--secondary:active:not(:disabled) {
+  opacity: 0.85;
+}
+
+/* === Предупреждение === */
+
+.warning {
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: rgba(215, 0, 34, 0.08);
+  border: 1px solid var(--error-color);
+}
+
+.warning__text {
+  font-size: 12px;
+  color: var(--error-color);
+  line-height: 1.4;
+}
+
+/* === Подвал === */
+
+.footer {
+  text-align: center;
+  padding-top: 4px;
+  border-top: 1px solid var(--border-color);
+  font-size: 11px;
+  color: var(--muted-color);
+}

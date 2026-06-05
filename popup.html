@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TabTopic Organizer</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <!-- Контейнер попапа -->
+  <div class="popup-container">
+
+    <!-- Заголовок расширения -->
+    <header class="header">
+      <h1 class="header__title">TabTopic Organizer</h1>
+      <p class="header__subtitle">Группировка вкладок по темам</p>
+    </header>
+
+    <!-- Область статуса — отображает результат выполнения -->
+    <div id="status" class="status" aria-live="polite">
+      <span id="status-icon" class="status__icon"></span>
+      <span id="status-text" class="status__text">Нажмите кнопку для группировки</span>
+    </div>
+
+    <!-- Кнопки управления -->
+    <div class="actions">
+      <button id="btn-group" class="btn btn--primary" type="button">
+        <svg class="btn__icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <rect x="1" y="1" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.5"/>
+          <rect x="9" y="1" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.5"/>
+          <rect x="1" y="9" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.5"/>
+          <rect x="9" y="9" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.5"/>
+        </svg>
+        <span>Сгруппировать вкладки</span>
+      </button>
+
+      <button id="btn-ungroup" class="btn btn--secondary" type="button">
+        <svg class="btn__icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <line x1="2" y1="2" x2="14" y2="14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="14" y1="2" x2="2" y2="14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <span>Разгруппировать все</span>
+      </button>
+    </div>
+
+    <!-- Предупреждение о недоступности API (скрыто по умолчанию) -->
+    <div id="warning" class="warning" hidden>
+      <p id="warning-text" class="warning__text"></p>
+    </div>
+
+    <!-- Подвал -->
+    <footer class="footer">
+      <span>TabTopic Organizer v1.0</span>
+    </footer>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
