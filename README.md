@@ -1,38 +1,46 @@
-# TabTopic Organizer — Beta 0.6
+# Privacy Policy
 
-Расширение для Mozilla Firefox, которое автоматически анализирует открытые вкладки и группирует их по тематике.
+**Extension:** TabTopic Organizer
+**Version:** Beta 0.6
+**Update:** June 5, 2026
 
-## Возможности
+---
 
-- Автоматическая категоризация по 7 темам + «Прочее»
-- Визуальная группировка через `browser.tabs.group`
-- Автогруппировка новых вкладок
-- Пользовательское редактирование и создание категорий
-- Сохранение настроек в `browser.storage.local`
-- Переключатель темы (светлая / тёмная / авто)
-- Счётчик открытых вкладок в реальном времени
+##1. Data collection
 
-## Установка
+The extension ** does not collect, store, or transfer ** data to third parties.
 
-1. Firefox 128+
-2. `about:debugging#/runtime/this-firefox`
-3. «Загрузить временный адд-on...» → `manifest.json`
+##2. Local work
 
-## Структура
+All operations are performed on your device:
 
-```
-├── manifest.json    v0.6.0
-├── background.js    Service Worker
-├── utils.js         Категоризация
-├── popup.html       Интерфейс
-├── popup.css        Стили (light/dark)
-├── popup.js         Логика popup
-├── icons/           SVG-иконки
-├── README.md
-├── Privacy Policy.md
-└── Update.md
-```
+- Analysis of titles and URLs of open tabs (current window)
+- Grouping tabs via the native browser API
+- Storing settings in `browser.storage.local` (categories, theme, auto-grouping)
 
-## Лицензия
+##3. Network requests
 
-MIT License
+The extension **does not send** network requests. Internet access is not required.
+
+##4. Storage
+
+`browser.storage.local` stores only:
+
+- Custom categories (names, keywords, colors)
+- Auto-grouping settings (on/off)
+- The selected interface theme
+
+The data does not leave the browser.
+
+##5. Access to tabs
+
+The `tabs` permission is used for:
+
+- Getting a list of tabs in the current window
+- Tab groupings
+
+The data is used only during the execution of the operation.
+
+##6. Contacts
+
+For privacy issues, create an issue in the project repository.
