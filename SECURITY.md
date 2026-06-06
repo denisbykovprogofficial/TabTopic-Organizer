@@ -1,46 +1,46 @@
-# Политика конфиденциальности
+# Privacy Policy
 
-**Расширение:** TabTopic Organizer
-**Версия:** Beta 0.6
-**Обновление:** 5 июня 2026 г.
+**Extension:** TabTopic Organizer
+**Version:** Beta 0.6
+**Update:** June 5, 2026
 
 ---
 
-## 1. Сбор данных
+##1. Data collection
 
-Расширение **не собирает, не хранит и не передаёт** данные третьим сторонам.
+The extension ** does not collect, store, or transfer ** data to third parties.
 
-## 2. Локальная работа
+##2. Local work
 
-Все операции выполняются на вашем устройстве:
+All operations are performed on your device:
 
-- Анализ заголовков и URL открытых вкладок (текущее окно)
-- Группировка вкладок через нативный API браузера
-- Хранение настроек в `browser.storage.local` (категории, тема, автогруппировка)
+- Analysis of titles and URLs of open tabs (current window)
+- Grouping tabs via the native browser API
+- Storing settings in `browser.storage.local` (categories, theme, auto-grouping)
 
-## 3. Сетевые запросы
+##3. Network requests
 
-Расширение **не отправляет** сетевых запросов. Доступ к интернету не требуется.
+The extension **does not send** network requests. Internet access is not required.
 
-## 4. Хранилище
+##4. Storage
 
-`browser.storage.local` хранит только:
+`browser.storage.local` stores only:
 
-- Пользовательские категории (названия, ключевые слова, цвета)
-- Настройку автогруппировки (вкл/выкл)
-- Выбранную тему интерфейса
+- Custom categories (names, keywords, colors)
+- Auto-grouping settings (on/off)
+- The selected interface theme
 
-Данные не покидают браузер.
+The data does not leave the browser.
 
-## 5. Доступ к вкладкам
+##5. Access to tabs
 
-Разрешение `tabs` используется для:
+The `tabs` permission is used for:
 
-- Получения списка вкладок текущего окна
-- Группировки вкладок
+- Getting a list of tabs in the current window
+- Tab groupings
 
-Данные используются только во время выполнения операции.
+The data is used only during the execution of the operation.
 
-## 6. Контакты
+##6. Contacts
 
-По вопросам конфиденциальности создайте issue в репозитории проекта.
+For privacy issues, create an issue in the project repository.
