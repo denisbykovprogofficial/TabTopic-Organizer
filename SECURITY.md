@@ -1,46 +1,46 @@
 # Privacy Policy
 
 **Extension:** TabTopic Organizer
-**Version:** Beta 0.6
-**Update:** June 5, 2026
+**Version:** Beta 0.5
+**Updated:** June 5, 2026
 
 ---
 
-##1. Data collection
+## 1. Data Collection
 
-The extension ** does not collect, store, or transfer ** data to third parties.
+This extension **does not collect, store, or transmit** any data to third parties.
 
-##2. Local work
+## 2. Local Operation
 
-All operations are performed on your device:
+All operations run locally on your device:
 
-- Analysis of titles and URLs of open tabs (current window)
-- Grouping tabs via the native browser API
+- Analyzing titles and URLs of open tabs (current window only)
+- Grouping tabs via the browser's native API
 - Storing settings in `browser.storage.local` (categories, theme, auto-grouping)
 
-##3. Network requests
+## 3. Network Requests
 
-The extension **does not send** network requests. Internet access is not required.
+This extension **makes no network requests**. Internet access is not required.
 
-##4. Storage
+## 4. Storage
 
 `browser.storage.local` stores only:
 
 - Custom categories (names, keywords, colors)
-- Auto-grouping settings (on/off)
-- The selected interface theme
+- Auto-grouping toggle (on/off)
+- Selected UI theme
 
-The data does not leave the browser.
+Data never leaves the browser.
 
-##5. Access to tabs
+## 5. Tab Access
 
 The `tabs` permission is used for:
 
-- Getting a list of tabs in the current window
-- Tab groupings
+- Querying tabs in the current window
+- Grouping tabs via `browser.tabs.group`
 
-The data is used only during the execution of the operation.
+Tab data is used only during the operation and is not persisted.
 
-##6. Contacts
+## 6. Contact
 
-For privacy issues, create an issue in the project repository.
+For privacy questions, open an issue in the project repository.
