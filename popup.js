@@ -1,30 +1,18 @@
 /**
- * popup.js — Логика интерфейса расширения TabTopic Organizer.
+ * popup.js — Логика интерфейса TabTopic Organizer v0.4.
  *
  * Управляет:
  * - Кнопками «Сгруппировать» и «Разгруппировать»
  * - Переключателем автогруппировки
  * - Редактированием пользовательских категорий
- * - Навигацией по секциям popup
+ * - Переключателем темы (светлая/тёмная)
  *
  * Взаимодействие с background.js через browser.runtime.sendMessage().
  */
 
 "use strict";
 
-// === Константы цветов для выпадающего списка ===
-
-const COLOR_OPTIONS = [
-  { value: "blue", label: "Синий" },
-  { value: "red", label: "Красный" },
-  { value: "yellow", label: "Жёлтый" },
-  { value: "green", label: "Зелёный" },
-  { value: "pink", label: "Розовый" },
-  { value: "purple", label: "Фиолетовый" },
-  { value: "cyan", label: "Бирюзовый" },
-  { value: "orange", label: "Оранжевый" },
-  { value: "grey", label: "Серый" }
-];
+// === Константы цветов ===
 
 const COLOR_HEX = {
   blue: "#0060df",
@@ -52,14 +40,14 @@ const btnAddCategory = document.getElementById("btn-add-category");
 const btnSaveCategories = document.getElementById("btn-save-categories");
 const btnResetCategories = document.getElementById("btn-reset-categories");
 const categoriesList = document.getElementById("categories-list");
-const tabCategories = document.getElementById("tab-categories");
-const tabAbout = document.getElementById("tab-about");
-const panelCategories = document.getElementById("panel-categories");
-const panelAbout = document.getElementById("panel-about");
+const btnTheme = document.getElementById("btn-theme");
+const iconSun = document.getElementById("icon-sun");
+const iconMoon = document.getElementById("icon-moon");
 
 // === Состояние ===
 
 let currentCategories = {};
+let currentTheme = "auto";
 
 // === Утилиты отображения ===
 
@@ -99,33 +87,90 @@ function showWarning(message) {
 }
 
 /**
- * Отправляет сообщение в background.js и возвращает ответ.
+ * Отправляет сообщение в background.js.
  */
 function sendMessage(msg) {
   return browser.runtime.sendMessage(msg);
 }
 
-// === Переключение секций ===
+// === Переключение темы ===
 
-function switchTab(activeTab, activePanel) {
-  tabCategories.classList.remove("tabs-nav__btn--active");
-  tabAbout.classList.remove("tabs-nav__btn--active");
-  panelCategories.hidden = true;
-  panelAbout.hidden = true;
+/**
+ * Применяет тему к body и обновляет иконки.
+ *
+ * @param {"auto"|"light"|"dark"} theme
+ */
+function applyTheme(theme) {
+  currentTheme = theme;
+  document.body.classList.remove("theme-light", "theme-dark");
 
-  activeTab.classList.add("tabs-nav__btn--active");
-  activePanel.hidden = false;
+  if (theme === "light") {
+    document.body.classList.add("theme-light");
+    iconSun.hidden = true;
+    iconMoon.hidden = false;
+  } else if (theme === "dark") {
+    document.body.classList.add("theme-dark");
+    iconSun.hidden = false;
+    iconMoon.hidden = true;
+  } else {
+    // auto — определяем по системе
+    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    if (prefersDark) {
+      document.body.classList.add("theme-dark");
+      iconSun.hidden = false;
+      iconMoon.hidden = true;
+    } else {
+      document.body.classList.add("theme-light");
+      iconSun.hidden = true;
+      iconMoon.hidden = false;
+    }
+  }
 }
 
-tabCategories.addEventListener("click", () => switchTab(tabCategories, panelCategories));
-tabAbout.addEventListener("click", () => switchTab(tabAbout, panelAbout));
+/**
+ * Переключает тему: auto -> light -> dark -> auto
+ */
+function cycleTheme() {
+  const order = ["auto", "light", "dark"];
+  const idx = order.indexOf(currentTheme);
+  const next = order[(idx + 1) % order.length];
+  applyTheme(next);
+  saveThemeToStorage(next);
+}
+
+/**
+ * Сохраняет выбор темы в storage.
+ */
+async function saveThemeToStorage(theme) {
+  try {
+    await browser.storage.local.set({ theme });
+  } catch (err) {
+    console.warn("[TabTopic] Не удалось сохранить тему:", err);
+  }
+}
+
+/**
+ * Загружает тему из storage.
+ */
+async function loadThemeFromStorage() {
+  try {
+    const result = await browser.storage.local.get(["theme"]);
+    if (result.theme) {
+      applyTheme(result.theme);
+    } else {
+      applyTheme("auto");
+    }
+  } catch {
+    applyTheme("auto");
+  }
+}
 
 // === Основные кнопки ===
 
 btnGroup.addEventListener("click", async () => {
   btnGroup.disabled = true;
   btnUngroup.disabled = true;
-  setStatus("loading", "Выполняется группировка вкладок...");
+  setStatus("loading", "Выполняется группировка...");
   showWarning(null);
 
   try {
@@ -166,6 +211,10 @@ btnUngroup.addEventListener("click", async () => {
   }
 });
 
+// === Кнопка темы ===
+
+btnTheme.addEventListener("click", cycleTheme);
+
 // === Переключатель автогруппировки ===
 
 toggleAutoGroup.addEventListener("change", async () => {
@@ -183,10 +232,6 @@ toggleAutoGroup.addEventListener("change", async () => {
 
 /**
  * Создаёт DOM-элемент карточки категории.
- *
- * @param {string} name — название категории
- * @param {{ keywords: string[], color: string }} data — данные категории
- * @returns {HTMLElement} — элемент карточки
  */
 function createCategoryCard(name, data) {
   const card = document.createElement("div");
@@ -201,13 +246,13 @@ function createCategoryCard(name, data) {
   nameInput.type = "text";
   nameInput.className = "category-card__name";
   nameInput.value = name;
-  nameInput.placeholder = "Название категории";
+  nameInput.placeholder = "Название";
 
   const deleteBtn = document.createElement("button");
   deleteBtn.type = "button";
   deleteBtn.className = "category-card__delete";
   deleteBtn.textContent = "\u00D7";
-  deleteBtn.title = "Удалить категорию";
+  deleteBtn.title = "Удалить";
 
   row1.appendChild(nameInput);
   row1.appendChild(deleteBtn);
@@ -216,18 +261,19 @@ function createCategoryCard(name, data) {
   const row2 = document.createElement("div");
   row2.className = "category-card__row";
 
-  const colorLabel = document.createElement("span");
-  colorLabel.textContent = "Цвет:";
-  colorLabel.style.fontSize = "11px";
-  colorLabel.style.color = "var(--muted-color)";
-
   const colorInput = document.createElement("input");
   colorInput.type = "color";
   colorInput.className = "category-card__color";
   colorInput.value = COLOR_HEX[data.color] || COLOR_HEX.grey;
 
-  row2.appendChild(colorLabel);
+  const colorLabel = document.createElement("span");
+  colorLabel.textContent = "Цвет";
+  colorLabel.style.fontSize = "11px";
+  colorLabel.style.color = "var(--text-muted)";
+  colorLabel.style.marginLeft = "4px";
+
   row2.appendChild(colorInput);
+  row2.appendChild(colorLabel);
 
   // Строка 3: ключевые слова
   const keywordsInput = document.createElement("textarea");
@@ -236,44 +282,36 @@ function createCategoryCard(name, data) {
   keywordsInput.placeholder = "Ключевые слова через запятую";
   keywordsInput.rows = 1;
 
-  // Сборка карточки
+  // Сборка
   card.appendChild(row1);
   card.appendChild(row2);
   card.appendChild(keywordsInput);
 
-  // Обработчик удаления
+  // Обработчики
   deleteBtn.addEventListener("click", () => {
     card.remove();
     delete currentCategories[name];
-    updateAboutCategoriesCount(currentCategories);
   });
 
-  // Обработчик изменения имени
   nameInput.addEventListener("change", () => {
     const oldName = card.dataset.name;
     const newName = nameInput.value.trim();
-
     if (newName && newName !== oldName) {
-      // Переносим данные под новым именем
       currentCategories[newName] = currentCategories[oldName];
       delete currentCategories[oldName];
       card.dataset.name = newName;
     }
   });
 
-  // Обработчик изменения цвета
   colorInput.addEventListener("input", () => {
     const colorName = Object.keys(COLOR_HEX).find(
       (k) => COLOR_HEX[k] === colorInput.value
     );
-    if (colorName && card.dataset.name) {
-      if (currentCategories[card.dataset.name]) {
-        currentCategories[card.dataset.name].color = colorName;
-      }
+    if (colorName && currentCategories[card.dataset.name]) {
+      currentCategories[card.dataset.name].color = colorName;
     }
   });
 
-  // Обработчик изменения ключевых слов
   keywordsInput.addEventListener("change", () => {
     const cardName = card.dataset.name;
     if (currentCategories[cardName]) {
@@ -288,11 +326,10 @@ function createCategoryCard(name, data) {
 }
 
 /**
- * Отрисовывает список категорий из currentCategories.
+ * Отрисовывает список категорий.
  */
 function renderCategories() {
   categoriesList.innerHTML = "";
-
   for (const [name, data] of Object.entries(currentCategories)) {
     const card = createCategoryCard(name, data);
     categoriesList.appendChild(card);
@@ -300,7 +337,7 @@ function renderCategories() {
 }
 
 /**
- * Загружает категории из background.js и отрисовывает их.
+ * Загружает категории из background.js.
  */
 async function loadCategories() {
   try {
@@ -315,7 +352,7 @@ async function loadCategories() {
 }
 
 /**
- * Собирает данные из всех карточек категорий и возвращает объект.
+ * Собирает данные из карточек.
  */
 function collectCategoriesFromUI() {
   const categories = {};
@@ -343,7 +380,7 @@ function collectCategoriesFromUI() {
   return categories;
 }
 
-// Кнопка «Добавить категорию»
+// Кнопка «Добавить»
 btnAddCategory.addEventListener("click", () => {
   const newName = "Новая категория";
   let uniqueName = newName;
@@ -359,10 +396,8 @@ btnAddCategory.addEventListener("click", () => {
   const card = createCategoryCard(uniqueName, currentCategories[uniqueName]);
   categoriesList.appendChild(card);
 
-  // Фокус на поле имени новой карточки
   card.querySelector(".category-card__name").focus();
   card.querySelector(".category-card__name").select();
-  updateAboutCategoriesCount(currentCategories);
 });
 
 // Кнопка «Сохранить»
@@ -373,9 +408,8 @@ btnSaveCategories.addEventListener("click", async () => {
     await sendMessage({ action: "saveCategories", categories });
     currentCategories = categories;
     setStatus("success", "Категории сохранены");
-    updateAboutCategoriesCount(currentCategories);
   } catch (err) {
-    setStatus("error", "Ошибка сохранения категорий");
+    setStatus("error", "Ошибка сохранения");
     console.error("[TabTopic Popup] Ошибка сохранения:", err);
   }
 });
@@ -387,103 +421,39 @@ btnResetCategories.addEventListener("click", async () => {
     if (response && response.categories) {
       currentCategories = response.categories;
       renderCategories();
-      setStatus("success", "Категории сброшены на стандартные");
-      updateAboutCategoriesCount(currentCategories);
+      setStatus("success", "Категории сброшены");
     }
   } catch (err) {
-    setStatus("error", "Ошибка сброса категорий");
+    setStatus("error", "Ошибка сброса");
     console.error("[TabTopic Popup] Ошибка сброса:", err);
   }
 });
 
-// === Обновление информации в секции «О расширении» ===
-
-/**
- * DOM-элементы секции «О расширении».
- */
-const aboutApiStatus = document.getElementById("about-api-status");
-const aboutAutoStatus = document.getElementById("about-auto-status");
-const aboutCategoriesCount = document.getElementById("about-categories-count");
-const aboutStorageStatus = document.getElementById("about-storage-status");
-
-/**
- * Обновляет статус API в секции «О расширении».
- *
- * @param {boolean} supported — доступен ли API группировки
- * @param {boolean} autoGroup — включена ли автогруппировка
- */
-function updateAboutAPIStatus(supported, autoGroup) {
-  if (supported) {
-    aboutApiStatus.textContent = "доступен";
-    aboutApiStatus.classList.remove("about__status-value--fail");
-    aboutApiStatus.classList.add("about__status-value--ok");
-  } else {
-    aboutApiStatus.textContent = "недоступен";
-    aboutApiStatus.classList.remove("about__status-value--ok");
-    aboutApiStatus.classList.add("about__status-value--fail");
-  }
-
-  aboutAutoStatus.textContent = autoGroup ? "включена" : "выключена";
-  aboutAutoStatus.classList.toggle("about__status-value--ok", autoGroup);
-}
-
-/**
- * Обновляет счётчик загруженных категорий.
- */
-function updateAboutCategoriesCount(categories) {
-  const count = categories ? Object.keys(categories).length : 0;
-  aboutCategoriesCount.textContent = `${count} шт.`;
-}
-
-/**
- * Проверяет доступность browser.storage.local.
- */
-async function checkStorageAvailability() {
-  try {
-    await browser.storage.local.set({ __test: true });
-    await browser.storage.local.remove("__test");
-    aboutStorageStatus.textContent = "доступно";
-    aboutStorageStatus.classList.remove("about__status-value--fail");
-    aboutStorageStatus.classList.add("about__status-value--ok");
-  } catch {
-    aboutStorageStatus.textContent = "недоступно";
-    aboutStorageStatus.classList.remove("about__status-value--ok");
-    aboutStorageStatus.classList.add("about__status-value--fail");
-  }
-}
-
 // === Инициализация ===
 
 (async function init() {
-  // Проверяем storage
-  await checkStorageAvailability();
+  // Загружаем тему
+  await loadThemeFromStorage();
 
   try {
     const response = await sendMessage({ action: "checkAPI" });
 
     if (response && !response.supported) {
       showWarning(
-        "API группировки вкладок (browser.tabs.group) недоступен. " +
-          "Расширение требует Firefox 128+."
+        "API группировки (browser.tabs.group) недоступен. Firefox 128+."
       );
       btnGroup.disabled = true;
       btnUngroup.disabled = true;
       toggleAutoGroup.disabled = true;
-      setStatus("error", "API группировки не поддерживается");
-      updateAboutAPIStatus(false, false);
+      setStatus("error", "API не поддерживается");
     } else if (response) {
       toggleAutoGroup.checked = !!response.autoGroup;
-      updateAboutAPIStatus(true, !!response.autoGroup);
     }
   } catch (err) {
     showWarning("Не удалось инициализировать расширение.");
     setStatus("error", "Ошибка инициализации");
-    updateAboutAPIStatus(false, false);
   }
 
   // Загружаем категории
   await loadCategories();
-
-  // Обновляем счётчик в «О расширении»
-  updateAboutCategoriesCount(currentCategories);
 })();
