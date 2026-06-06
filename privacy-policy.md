@@ -1,56 +1,56 @@
-# Политика конфиденциальности
+# Privacy Policy
 
-**Расширение:** TabTopic Organizer
-**Версия:** Beta 0.4
-**Последнее обновление:** 5 июня 2026 г.
+**Extension:** TabTopic Organizer
+**Version:** Beta 0.4
+**Last update:** June 5, 2026
 
 ---
 
-## 1. Сбор данных
+##1. Data collection
 
-Расширение **не собирает, не хранит и не передаёт** никакие данные третьим сторонам.
+The extension ** does not collect, store, or transfer ** any data to third parties.
 
-## 2. Как работает расширение
+## 2. How the extension works
 
-TabTopic Organizer работает **исключительно локально** в вашем браузере. Расширение:
+TabTopic Organizer works **exclusively locally** in your browser. Expansion:
 
-- Читает заголовки (title) и URL-адреса открытых вкладок **только текущего окна**.
-- Анализирует их на наличие ключевых слов для определения тематики.
-- Использует нативный API браузера для создания визуальных групп вкладок.
+- Reads the titles and URLs of open tabs **only of the current window**.
+- Analyzes them for keywords to determine the topic.
+- Uses the native browser API to create visual tab groups.
 
-Все операции выполняются на вашем устройстве. Никакие данные не покидают браузер.
+All operations are performed on your device. No data leaves the browser.
 
-## 3. Хранилище данных
+##3. Data Warehouse
 
-Расширение использует `browser.storage.local` для хранения:
+The extension uses `browser.storage.local` for storage:
 
-- Пользовательских категорий (названия, ключевые слова, цвета)
-- Настройки автогруппировки (вкл/выкл)
-- Выбранной темы интерфейса (светлая/тёмная/авто)
+- Custom categories (names, keywords, colors)
+- Auto-grouping settings (on/off)
+- Selected interface theme (light/dark/auto)
 
-Эти данные хранятся **только локально** на вашем устройстве и не передаются в сеть.
+This data is stored **only locally** on your device and is not transmitted to the network.
 
-## 4. Сетевые запросы
+## 4. Network requests
 
-Расширение **не отправляет** никаких сетевых запросов. Доступ к интернету не требуется.
+The extension **does not send** any network requests. Internet access is not required.
 
-## 5. Доступ к вкладкам
+##5. Access to tabs
 
-Расширение запрашивает разрешение `tabs` для:
+The extension requests the `tabs` permission for:
 
-- Получения списка вкладок текущего окна (`browser.tabs.query`).
-- Группировки вкладок (`browser.tabs.group`).
+- Getting a list of tabs in the current window ('browser.tabs.query').
+- Tab groupings ('browser.tabs.group').
 
-Данные о вкладках используются **только во время выполнения операции** и не сохраняются.
+The tab data is used **only during the operation** and is not saved.
 
-## 6. Поставщики третьих сторон
+##6. Third-party Suppliers
 
-Расширение **не интегрируется** с какими-либо сторонними сервисами, API или SDK.
+The extension **does not integrate** with any third-party services, API or SDK.
 
-## 7. Детали для детей
+## 7. Details for children
 
-Расширение не предназначено для детей младше 13 лет и не собирает данные о несовершеннолетних.
+The extension is not intended for children under the age of 13 and does not collect data on minors.
 
-## 8. Контакты
+##8. Contacts
 
-По вопросам конфиденциальности создайте issue в репозитории проекта.
+For privacy issues, create an issue in the project repository.
