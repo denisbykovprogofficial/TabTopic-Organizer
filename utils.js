@@ -63,12 +63,30 @@ function getActiveCategories() {
 
 function categorizeTab(tab) {
   const text = `${tab.title || ""} ${tab.url || ""}`.toLowerCase();
-
   for (const [name, { keywords, color }] of Object.entries(activeCategories)) {
     if (keywords.some((kw) => text.includes(kw.toLowerCase()))) {
       return { name, color };
     }
   }
-
   return { name: DEFAULT_CATEGORY_NAME, color: "grey" };
+}
+
+function isEligibleTab(tab) {
+  const url = tab.url || "";
+  return !url.startsWith("about:") && !url.startsWith("moz-extension:") && !url.startsWith("https://addons.mozilla.org/");
+}
+
+function findDuplicateTabs(tabs) {
+  const urlMap = new Map();
+  for (const tab of tabs) {
+    const url = tab.url || "";
+    if (!url || !isEligibleTab(tab)) continue;
+    if (!urlMap.has(url)) urlMap.set(url, []);
+    urlMap.get(url).push(tab);
+  }
+  const dupes = [];
+  for (const [url, tabArr] of urlMap) {
+    if (tabArr.length > 1) dupes.push({ url, tabs: tabArr });
+  }
+  return dupes;
 }

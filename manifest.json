@@ -2,8 +2,8 @@
   "manifest_version": 3,
   "name": "TabTopic Organizer",
   "version": "0.6.0",
-  "description": "Автоматический анализ и группировка открытых вкладок по тематике",
-  "permissions": ["tabs", "tabGroups", "storage"],
+  "description": "Analyze and group open tabs by topic with custom categories, auto-grouping, and session management",
+  "permissions": ["tabs", "tabGroups", "storage", "contextMenus"],
   "background": {
     "scripts": ["utils.js", "background.js"]
   },
@@ -14,6 +14,20 @@
       "32": "icons/icon-32.svg",
       "48": "icons/icon-48.svg",
       "96": "icons/icon-96.svg"
+    }
+  },
+  "commands": {
+    "group-tabs": {
+      "suggested_key": { "default": "Alt+Shift+G" },
+      "description": "Group all tabs by topic"
+    },
+    "ungroup-tabs": {
+      "suggested_key": { "default": "Alt+Shift+U" },
+      "description": "Ungroup all tabs"
+    },
+    "undo-group": {
+      "suggested_key": { "default": "Alt+Shift+Z" },
+      "description": "Undo last grouping"
     }
   },
   "browser_specific_settings": {
