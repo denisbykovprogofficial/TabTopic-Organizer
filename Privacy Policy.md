@@ -1,46 +1,46 @@
-# Политика конфиденциальности
+# Privacy Policy
 
-**Расширение:** TabTopic Organizer
-**Версия:** Beta 0.6
-**Обновление:** 5 июня 2026 г.
+**Extension:** TabTopic Organizer
+**Version:** Beta 0.5
+**Updated:** June 5, 2026
 
 ---
 
-## 1. Сбор данных
+## 1. Data Collection
 
-Расширение **не собирает, не хранит и не передаёт** данные третьим сторонам.
+This extension **does not collect, store, or transmit** any data to third parties.
 
-## 2. Локальная работа
+## 2. Local Operation
 
-Все операции выполняются на вашем устройстве:
+All operations run locally on your device:
 
-- Анализ заголовков и URL открытых вкладок (текущее окно)
-- Группировка вкладок через нативный API браузера
-- Хранение настроек в `browser.storage.local` (категории, тема, автогруппировка)
+- Analyzing titles and URLs of open tabs (current window only)
+- Grouping tabs via the browser's native API
+- Storing settings in `browser.storage.local` (categories, theme, auto-grouping)
 
-## 3. Сетевые запросы
+## 3. Network Requests
 
-Расширение **не отправляет** сетевых запросов. Доступ к интернету не требуется.
+This extension **makes no network requests**. Internet access is not required.
 
-## 4. Хранилище
+## 4. Storage
 
-`browser.storage.local` хранит только:
+`browser.storage.local` stores only:
 
-- Пользовательские категории (названия, ключевые слова, цвета)
-- Настройку автогруппировки (вкл/выкл)
-- Выбранную тему интерфейса
+- Custom categories (names, keywords, colors)
+- Auto-grouping toggle (on/off)
+- Selected UI theme
 
-Данные не покидают браузер.
+Data never leaves the browser.
 
-## 5. Доступ к вкладкам
+## 5. Tab Access
 
-Разрешение `tabs` используется для:
+The `tabs` permission is used for:
 
-- Получения списка вкладок текущего окна
-- Группировки вкладок
+- Querying tabs in the current window
+- Grouping tabs via `browser.tabs.group`
 
-Данные используются только во время выполнения операции.
+Tab data is used only during the operation and is not persisted.
 
-## 6. Контакты
+## 6. Contact
 
-По вопросам конфиденциальности создайте issue в репозитории проекта.
+For privacy questions, open an issue in the project repository.

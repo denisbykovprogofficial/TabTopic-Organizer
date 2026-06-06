@@ -1,46 +1,38 @@
-# Privacy Policy
+# TabTopic Organizer — Beta 0.5
 
-**Extension:** TabTopic Organizer
-**Version:** Beta 0.6
-**Update:** June 5, 2026
+Firefox extension that automatically analyzes open tabs and groups them by topic.
 
----
+## Features
 
-##1. Data collection
+- Auto-categorization into 7 themes + "Other"
+- Visual grouping via `browser.tabs.group`
+- Auto-grouping of new tabs
+- Custom category editing and creation
+- Settings saved in `browser.storage.local`
+- Theme switcher (light / dark / auto)
+- Live tab counter
 
-The extension ** does not collect, store, or transfer ** data to third parties.
+## Installation
 
-##2. Local work
+1. Firefox 128+
+2. `about:debugging#/runtime/this-firefox`
+3. "Load Temporary Add-on..." → `manifest.json`
 
-All operations are performed on your device:
+## Structure
 
-- Analysis of titles and URLs of open tabs (current window)
-- Grouping tabs via the native browser API
-- Storing settings in `browser.storage.local` (categories, theme, auto-grouping)
+```
+├── manifest.json    v0.5.0
+├── background.js    Service Worker
+├── utils.js         Categorization
+├── popup.html       Interface
+├── popup.css        Styles (light/dark)
+├── popup.js         Popup logic
+├── icons/           SVG icons
+├── README.md
+├── Privacy Policy.md
+└── Update.md
+```
 
-##3. Network requests
+## License
 
-The extension **does not send** network requests. Internet access is not required.
-
-##4. Storage
-
-`browser.storage.local` stores only:
-
-- Custom categories (names, keywords, colors)
-- Auto-grouping settings (on/off)
-- The selected interface theme
-
-The data does not leave the browser.
-
-##5. Access to tabs
-
-The `tabs` permission is used for:
-
-- Getting a list of tabs in the current window
-- Tab groupings
-
-The data is used only during the execution of the operation.
-
-##6. Contacts
-
-For privacy issues, create an issue in the project repository.
+MIT License
