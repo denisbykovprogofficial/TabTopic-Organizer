@@ -1,4 +1,68 @@
-# TabTopic Organizer — Beta 0.3
+# TabTopic Organizer — Beta 0.4
+
+Расширение для Mozilla Firefox, которое автоматически анализирует открытые вкладки и группирует их по тематике.
+
+## Возможности
+
+- Анализ заголовков и URL всех вкладок в текущем окне
+- Автоматическая категоризация по 7 темам + «Прочее»
+- Визуальная группировка вкладок через нативный API `browser.tabs.group`
+- Цветовое кодирование категорий (9 цветов)
+- Кнопка «Разгруппировать все» для сброса
+- Автогруппировка новых вкладок (опционально)
+- Пользовательское редактирование категорий
+- Создание собственных категорий
+- Сохранение настроек в `browser.storage.local`
+- Переключатель темы (светлая / тёмная / авто)
+- Встроенные SVG-иконки
+
+## Установка
+
+1. Откройте Firefox 128+.
+2. Перейдите по адресу `about:debugging#/runtime/this-firefox`.
+3. Нажмите **«Загрузить временный адд-on...»**.
+4. Выберите файл `manifest.json` из папки проекта.
+
+## Структура проекта
+
+```
+├── manifest.json      — Манифест Manifest V3 (v0.4.0)
+├── background.js      — Service Worker: группировка, storage, автогруппировка
+├── utils.js           — Словарь категорий и функция categorizeTab()
+├── popup.html         — Интерфейс попапа
+├── popup.css          — Стили: 3 темы (light/dark/auto)
+├── popup.js           — Логика: редактирование, storage, тема
+├── icons/             — SVG-иконки (градиент)
+│   ├── icon-16.svg
+│   ├── icon-32.svg
+│   ├── icon-48.svg
+│   └── icon-96.svg
+├── README.md          — Этот файл
+├── Privacy Policy.md  — Политика конфиденциальности
+└── Update.md          — История релизов
+```
+
+## Требования
+
+- Mozilla Firefox 128 или новее
+- API `browser.tabs.group` должен быть доступен
+
+## Категории
+
+| Категория       | Цвет      | Примеры сайтов                                |
+|-----------------|-----------|-----------------------------------------------|
+| Разработка      | Синий     | GitHub, StackOverflow, MDN, Habr              |
+| Новости         | Красный   | BBC, CNN, РБК, The Verge                      |
+| Соцсети         | Фиолетовый| YouTube, Twitter/X, Reddit, Telegram, VK      |
+| Покупки         | Оранжевый | Amazon, Ozon, Wildberries, eBay               |
+| Работа и Офис   | Жёлтый    | Google Docs, Notion, Trello, Figma            |
+| Обучение        | Бирюзовый | Coursera, Udemy, LeetCode, Wikipedia          |
+| Развлечения     | Розовый   | Netflix, Spotify, Steam, Кинопоиск            |
+| Прочее          | Серый     | Все остальные сайты                           |
+
+## Лицензия
+
+MIT License# TabTopic Organizer — Beta 0.3
 
 An extension for Mozilla Firefox that automatically analyzes open tabs and groups them by topic.
 
