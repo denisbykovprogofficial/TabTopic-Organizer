@@ -1,56 +1,46 @@
-# Privacy Policy
+# Политика конфиденциальности
 
-**Extension:** TabTopic Organizer
-**Version:** Beta 0.4
-**Last update:** June 5, 2026
+**Расширение:** TabTopic Organizer
+**Версия:** Beta 0.6
+**Обновление:** 5 июня 2026 г.
 
 ---
 
-##1. Data collection
+## 1. Сбор данных
 
-The extension ** does not collect, store, or transfer ** any data to third parties.
+Расширение **не собирает, не хранит и не передаёт** данные третьим сторонам.
 
-## 2. How the extension works
+## 2. Локальная работа
 
-TabTopic Organizer works **exclusively locally** in your browser. Expansion:
+Все операции выполняются на вашем устройстве:
 
-- Reads the titles and URLs of open tabs **only of the current window**.
-- Analyzes them for keywords to determine the topic.
-- Uses the native browser API to create visual tab groups.
+- Анализ заголовков и URL открытых вкладок (текущее окно)
+- Группировка вкладок через нативный API браузера
+- Хранение настроек в `browser.storage.local` (категории, тема, автогруппировка)
 
-All operations are performed on your device. No data leaves the browser.
+## 3. Сетевые запросы
 
-##3. Data Warehouse
+Расширение **не отправляет** сетевых запросов. Доступ к интернету не требуется.
 
-The extension uses `browser.storage.local` for storage:
+## 4. Хранилище
 
-- Custom categories (names, keywords, colors)
-- Auto-grouping settings (on/off)
-- Selected interface theme (light/dark/auto)
+`browser.storage.local` хранит только:
 
-This data is stored **only locally** on your device and is not transmitted to the network.
+- Пользовательские категории (названия, ключевые слова, цвета)
+- Настройку автогруппировки (вкл/выкл)
+- Выбранную тему интерфейса
 
-## 4. Network requests
+Данные не покидают браузер.
 
-The extension **does not send** any network requests. Internet access is not required.
+## 5. Доступ к вкладкам
 
-##5. Access to tabs
+Разрешение `tabs` используется для:
 
-The extension requests the `tabs` permission for:
+- Получения списка вкладок текущего окна
+- Группировки вкладок
 
-- Getting a list of tabs in the current window ('browser.tabs.query').
-- Tab groupings ('browser.tabs.group').
+Данные используются только во время выполнения операции.
 
-The tab data is used **only during the operation** and is not saved.
+## 6. Контакты
 
-##6. Third-party Suppliers
-
-The extension **does not integrate** with any third-party services, API or SDK.
-
-## 7. Details for children
-
-The extension is not intended for children under the age of 13 and does not collect data on minors.
-
-##8. Contacts
-
-For privacy issues, create an issue in the project repository.
+По вопросам конфиденциальности создайте issue в репозитории проекта.
