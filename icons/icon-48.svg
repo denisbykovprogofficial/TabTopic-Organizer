@@ -1,15 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
-  <defs>
-    <linearGradient id="g48" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#667eea"/>
-      <stop offset="100%" stop-color="#764ba2"/>
-    </linearGradient>
-  </defs>
-  <rect x="6" y="6" width="36" height="36" rx="9" fill="url(#g48)"/>
-  <rect x="12" y="15" width="9" height="6" rx="1.5" fill="white" opacity="0.9"/>
-  <rect x="12" y="25" width="12" height="6" rx="1.5" fill="white" opacity="0.7"/>
-  <rect x="12" y="35" width="7" height="6" rx="1.5" fill="white" opacity="0.5"/>
-  <rect x="25" y="15" width="11" height="6" rx="1.5" fill="white" opacity="0.8"/>
-  <rect x="27" y="25" width="9" height="6" rx="1.5" fill="white" opacity="0.6"/>
-  <rect x="25" y="35" width="11" height="6" rx="1.5" fill="white" opacity="0.4"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48"><defs><linearGradient id="g" x1="0" y1="0" x2="48" y2="48"><stop stop-color="#667eea"/><stop offset="1" stop-color="#764ba2"/></linearGradient></defs><rect width="48" height="48" rx="12" fill="url(#g)"/><rect x="9" y="15" width="12" height="7" rx="2" fill="#fff" opacity=".9"/><rect x="9" y="27" width="16" height="7" rx="2" fill="#fff" opacity=".6"/><rect x="24" y="15" width="14" height="7" rx="2" fill="#fff" opacity=".7"/><rect x="26" y="27" width="12" height="7" rx="2" fill="#fff" opacity=".5"/></svg>
